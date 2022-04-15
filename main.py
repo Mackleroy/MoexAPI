@@ -82,7 +82,7 @@ class MoexClient:
         """
         security_list_url = self.MOEX_DOMAIN + \
             self.SECURITIES_LIST_PATH.format(self.market) + '?limit=10'
-        # we don't need 900+ items for now, that is why limit is 10
+        # we don't need too mach items for now, that is why limit is 10
         response = requests.get(security_list_url)
         root = ET.fromstring(response.content)
         securities_data = root.findall('./data[@id="history"]/rows/')
@@ -124,6 +124,7 @@ class MoexClient:
                 self.cost_of_security = self.cost_of_security / usd_quote
             return self.cost_of_security.quantize(Decimal('0.001'))
             # purpose is only to represent
+            # 3 points after dot like in broker terminals
 
     def make_options(self, dict_of_items):
         """Make string of options from dict of items.
