@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 
 
 class MoexClient:
+    """MoexClient for fetching securities via API."""
 
     MOEX_DOMAIN = 'http://iss.moex.com'
     CURRENCY_PATH = '/iss/statistics/engines/currency/markets/selt/rates/'
@@ -16,13 +17,14 @@ class MoexClient:
     ALLOWED_CURRENCY = ['USD', 'RUB']
 
     def __init__(self):
+        """Init for MoexClient."""
         self.market = None
         self.security = None
         self.currency = None
-        self.cost_of_security = None
+        self.price_of_security = None
 
     def init_fetching_security(self):
-        """Get security with detail info depending on user choice."""
+        """Fetch security with detail info depending on user choice."""
         markets = self.get_markets()
         market_options = self.make_options(markets)
 
@@ -36,14 +38,14 @@ class MoexClient:
         self.security = self.get_validated_input(securities.keys())
 
         security_info = self.get_security_info()
-        self.cost_of_security = Decimal(
+        self.price_of_security = Decimal(
             securities[self.security]['yesterday_price'] or 0)
 
         print(f'Chose currency to display: RUB, USD.')
         self.currency = self.get_validated_input(self.ALLOWED_CURRENCY)
         security_info.update(
             {'yesterday_price': {
-                'cost': self.calculate_cost(),
+                'price': self.calculate_price(),
                 'currency': self.currency
             }}
         )
@@ -108,21 +110,21 @@ class MoexClient:
         return {elem.attrib['title']: elem.attrib['value'] for elem in
                 description}
 
-    def calculate_cost(self):
-        """Calculates cost in chosen currency, depending on market type.
+    def calculate_price(self):
+        """Calculates price in chosen currency, depending on market type.
 
-        :return: cost in chosen currency, type: Decimal
+        :return: price in chosen currency, type: Decimal
         """
         if self.market in self.USD_MARKETS and self.currency == 'USD' or \
                 self.market not in self.USD_MARKETS and self.currency == 'RUB':
-            return self.cost_of_security
+            return self.price_of_security
         else:
             usd_quote = self.get_usd_currency_quote()
             if self.market in self.USD_MARKETS and self.currency == 'RUB':
-                self.cost_of_security = self.cost_of_security * usd_quote
+                self.price_of_security = self.price_of_security * usd_quote
             else:
-                self.cost_of_security = self.cost_of_security / usd_quote
-            return self.cost_of_security.quantize(Decimal('0.001'))
+                self.price_of_security = self.price_of_security / usd_quote
+            return self.price_of_security.quantize(Decimal('0.001'))
             # purpose is only to represent
             # 3 points after dot like in broker terminals
 
