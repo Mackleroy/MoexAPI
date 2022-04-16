@@ -8,9 +8,9 @@ import xml.etree.ElementTree as ET
 class MoexClient:
 
     MOEX_DOMAIN = 'http://iss.moex.com'
-    CURRENCY_PATH = '/iss/statistics/engines/currency/markets/selt/rates.xml'
-    MARKETS_PATH = '/iss/engines/stock/markets.xml'
-    SECURITIES_LIST_PATH = '/iss/history/engines/stock/markets/{}/securities'
+    CURRENCY_PATH = '/iss/statistics/engines/currency/markets/selt/rates/'
+    MARKETS_PATH = '/iss/engines/stock/markets/'
+    SECURITIES_LIST_PATH = '/iss/history/engines/stock/markets/{}/securities/'
     SECURITIES_DETAIL_PATH = '/iss/securities/{}/'
     USD_MARKETS = ['foreignshares', 'foreignndm', 'mamc']
     ALLOWED_CURRENCY = ['USD', 'RUB']
