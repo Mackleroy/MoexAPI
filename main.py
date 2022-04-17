@@ -67,7 +67,7 @@ class MoexClient:
     def get_usd_currency_quote(self):
         """Make request to MOEX currency endpoint and return USD quotes.
 
-        :return: dict of currencies, type: Decimal
+        :return: USD currency quote, type: Decimal
         """
         currency_url = self.MOEX_DOMAIN + self.CURRENCY_PATH
         response = requests.get(currency_url)
